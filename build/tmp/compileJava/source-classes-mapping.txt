@@ -1,0 +1,6 @@
+commands/ServerInfo.java
+ commands.ServerInfo
+events/HelloEvent.java
+ events.HelloEvent
+Bot.java
+ Bot
