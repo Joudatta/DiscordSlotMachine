@@ -12,7 +12,7 @@ public class HelloEvent extends ListenerAdapter {
         String[] msgSent = event.getMessage().getContentRaw().split(" ");
         if (msgSent[0].equalsIgnoreCase("slots")) {
             if (!Objects.requireNonNull(event.getMember()).getUser().isBot()) {
-                event.getChannel().sendMessage("Wow, I love pickles!").queue();
+                event.getChannel().sendMessage("Wow, I love playing slots!").queue();
             }
         }
     }
