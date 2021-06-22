@@ -1,6 +1,13 @@
+import com.jagrosh.jdautilities.command.CommandClient;
+import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import commands.Calculate;
+import commands.ServerInfo;
 import events.HelloEvent;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
+
+import javax.security.auth.login.LoginException;
 
 public class Bot {
 
@@ -16,7 +23,7 @@ public class Bot {
 //        ez.setPrefix(prefix);
 //        ez.setHelpWord("help");
 //        ez.addCommand(new ServerInfo());
-
+//
 //        CommandClient client = ez.build();
 //        jda.addEventListeners(client);
 //    }
@@ -26,8 +33,7 @@ public class Bot {
 //        System.out.println("Bot enabled!!!");
         JDA jda = JDABuilder.createDefault(token).build();
         jda.addEventListener(new HelloEvent());
-
+        jda.addEventListener(new Calculate());
     }
-
 
 }
