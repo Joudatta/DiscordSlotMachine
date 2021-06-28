@@ -6,8 +6,10 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.RestAction;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class HelloEvent extends ListenerAdapter {
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
@@ -20,8 +22,14 @@ public class HelloEvent extends ListenerAdapter {
             if (!Objects.requireNonNull(event.getMember()).getUser().isBot()) {
                 event.getChannel().sendMessage("Wow, I love playing slots!").queue();
                 event.getChannel().sendMessage(":joy:").queue();
-                long x = event.getChannel().getLatestMessageIdLong();
+                String x;
+                if (event.getChannel().hasLatestMessage()) {
+                    x = event.getChannel().getLatestMessageId();
+                    event.getChannel().editMessageById(x, "What").queue();
+                }
+//                event.getChannel().retrieveMessageById(x).
 //                event.getChannel().edit(x, ":joy_cat:").queue();//change this or remove!
+
             }
         }
     }
