@@ -1,8 +1,8 @@
-commands/Calculate.java
- commands.Calculate
-commands/ServerInfo.java
- commands.ServerInfo
 events/HelloEvent.java
  events.HelloEvent
+commands/ServerInfo.java
+ commands.ServerInfo
 Bot.java
  Bot
+commands/Calculate.java
+ commands.Calculate
