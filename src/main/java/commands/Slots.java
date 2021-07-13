@@ -1,18 +1,12 @@
-package events;
+package commands;
 
-import net.dv8tion.jda.api.entities.Emote;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.utils.WidgetUtil.Widget.Member;
-import net.dv8tion.jda.api.requests.RestAction;
 
 import java.util.Date;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Slots extends ListenerAdapter {
 
@@ -28,10 +22,10 @@ public class Slots extends ListenerAdapter {
         System.out.println("randINT = " + randINT + ", ");
         float randFLOAT = rand.nextFloat();
         System.out.print("randFLOAT = " + randFLOAT + "\n");
-        //Should have at least a 3 second duration before the slot machine stops spinning
+        //Should have at least a 3 second duration before the slot machine stops spinning.
 
         long delayTime = 850L;
-        long delayMultiplier = 1L; //this will keep increasing to give enough time for visible changes to occur.
+        long delayMultiplier = 1L; //this will allow to modify the delays of the edited messages.
         int spamChecker = 0;
 
         while(elapsedTime <= (1000) * (3 + randINT + randFLOAT)) {
@@ -93,7 +87,6 @@ public class Slots extends ListenerAdapter {
                 spamChecker = 0;
             }
             elapsedTime = (new Date()).getTime() - startTime;
-        //add stuff here for sure, method not done
         }
         return previousN;
     }
@@ -155,7 +148,7 @@ public class Slots extends ListenerAdapter {
     }
 
     int rowOfSlotMachine = 0; //indicates which row of the slot machine is currently being displayed.
-    int rowOutcomes[] = new int[3];
+    int[] rowOutcomes = new int[3];
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
@@ -163,24 +156,11 @@ public class Slots extends ListenerAdapter {
 
         String[] msgSent = event.getMessage().getContentRaw().split(" ");
         String name = Objects.requireNonNull(event.getMember()).getUser().getName();
-        if (msgSent[0].equalsIgnoreCase("hi")) {
-            event.getChannel().sendMessage("Hello " + event.getAuthor().getAsMention() + "!").queue();
-        }
         if (msgSent[0].equalsIgnoreCase("slots")) {
             if (!Objects.requireNonNull(event.getMember()).getUser().isBot()) {
-//                  String x;
                 event.getChannel().sendMessage("First column!").queue();
-//                  x = event.getChannel().getLatestMessageId();
-//                  System.out.println("Wow i love playing slots = " + x);
                 event.getChannel().sendMessage(":slot_machine:").queueAfter(750, TimeUnit.MILLISECONDS);
                 rowOfSlotMachine = 1;
-//                  x = event.getChannel().getLatestMessageId();
-//                  System.out.println(":joy: = " + x);
-//                  if (event.getChannel().hasLatestMessage()) {
-//                      x = event.getChannel().getLatestMessageId();
-//                      System.out.println("latest message? = " + x);
-//                      event.getChannel().editMessageById(x, "What").queue();
-//                  }
             }
         }
 
@@ -191,7 +171,7 @@ public class Slots extends ListenerAdapter {
             rowOutcomes[rowOfSlotMachine-1] = randEditSlotEmote(event, botMsgId);
             if (rowOfSlotMachine == 1) {
                 System.out.println("column 1 outcome = " + rowOutcomes[0] + "\n");
-                event.getChannel().sendMessage("Second column!").queueAfter(1000, TimeUnit.MILLISECONDS);
+                event.getChannel().sendMessage("Second column!").queue();
 //                System.out.println("Second column");
                 event.getChannel().sendMessage(":slot_machine:").queueAfter(1000, TimeUnit.MILLISECONDS);
                 rowOfSlotMachine++;
@@ -200,7 +180,7 @@ public class Slots extends ListenerAdapter {
                 System.out.println("column 2 outcome = " + rowOutcomes[1] + "\n");
                 //add a function here that randomly decides to make the first and second column have the same emoji, EDIT: I HAVE ADDED IT JUST BELOW!!!
                 rowOutcomes[1] = randEditSlotOutcome(event, botMsgId, rowOutcomes[0], rowOutcomes[1], 2);
-                event.getChannel().sendMessage("Third column!").queueAfter(1000, TimeUnit.MILLISECONDS);
+                event.getChannel().sendMessage("Third column!").queue();
 //                System.out.println("Third column");
                 event.getChannel().sendMessage(":slot_machine:").queueAfter(1000, TimeUnit.MILLISECONDS);
                 rowOfSlotMachine++;
@@ -210,34 +190,13 @@ public class Slots extends ListenerAdapter {
                 //add a function here that randomly decides to make the first and second column have the same emoji, EDIT: I HAVE ADDED IT JUST BELOW!!!
                 rowOutcomes[2] = randEditSlotOutcome(event, botMsgId, rowOutcomes[0], rowOutcomes[2], 4);
                 if (rowOutcomes[0] == rowOutcomes[1] && rowOutcomes[0] == rowOutcomes[2]) {
-                    event.getChannel().sendMessage("Wow! You got 3 in a row!").queueAfter(1200, TimeUnit.MILLISECONDS);
+                    event.getChannel().sendMessage("Wow! You got 3 in a row!").queueAfter(1300, TimeUnit.MILLISECONDS);
                 }
                 else {
-                    event.getChannel().sendMessage("... Not even close.").queueAfter(1200, TimeUnit.MILLISECONDS);
+                    event.getChannel().sendMessage("... Not even close.").queueAfter(1300, TimeUnit.MILLISECONDS);
                 }
-//                System.out.println("...");
                 rowOfSlotMachine = 0;
             }
-//            event.getChannel().editMessageById(botMsgId, ":grapes:").queueAfter(750, TimeUnit.MILLISECONDS);
-//            event.getChannel().editMessageById(botMsgId, ":seven:").queueAfter(1500, TimeUnit.MILLISECONDS);// Make this so that it edits messages a random amount of times (think for loops or maybe even while loops)
-            //, so that it feels more like a slot machine, also make it so that random emojis (except the one that its currently on is avoided) are selected every iteration of that loop.
         }
-//        if (event.getMember().getUser().isBot() && event.getMessage().getContentRaw().equalsIgnoreCase(":slot_machine:")) {
-//            long botMsgId = event.getChannel().getLatestMessageIdLong();
-//            randEditSlotEmote(event, botMsgId);
-//            event.getChannel().sendMessage("Third column!").queueAfter(850, TimeUnit.MILLISECONDS);
-//
-//        }
-//        if (event.getMember().getUser().isBot() && event.getMessage().getContentRaw().equalsIgnoreCase("Third column!")) {
-//            long botMsgId = event.getChannel().getLatestMessageIdLong();
-//            randEditSlotEmote(event, botMsgId);
-//            event.getChannel().sendMessage("...").queueAfter(850, TimeUnit.MILLISECONDS);
-//        }
     }
-//    public void onMessageReceived(MessageReceivedEvent eventA) {
-//        String msg = eventA.getMessage().getContentRaw();
-//        if (msg.equalsIgnoreCase("hank")) {
-//            eventA.getChannel().sendMessage("wow!").queue();
-//        }
-//    }
 }

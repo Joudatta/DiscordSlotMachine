@@ -1,8 +1,8 @@
-events/HelloEvent.java
- events.HelloEvent
 commands/ServerInfo.java
  commands.ServerInfo
-Bot.java
- Bot
 commands/Calculate.java
  commands.Calculate
+events/Slots.java
+ events.Slots
+Bot.java
+ Bot
